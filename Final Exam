@@ -1,0 +1,174 @@
+import json
+
+with open('property-list.json') as d:
+    properties = json.load(d)
+
+with open('str-listings.json') as f:
+    listings = json.load(f)
+
+def TotalProperties(self):
+    return len(self)
+
+def AirBnB(self):
+    AirBnB = []
+    index = 0
+    while index < len(properties):
+        PropID = properties[index]["propertyId"]
+        Platform = properties[index]["onlinePlatforms"]
+        if "airbnb" in Platform:
+            AirBnB.append(PropID)
+            index = index + 1
+        else:
+            index = index + 1
+    return len(AirBnB)
+
+def VRBO(self):
+    vrbo = []
+    index = 0
+    while index < len(properties):
+        PropID = properties[index]["propertyId"]
+        Platform = properties[index]["onlinePlatforms"]
+        if "vrbo" in Platform:
+            vrbo.append(PropID)
+            index = index + 1
+        else:
+            index = index + 1
+    return len(vrbo)
+
+def Combined(self):
+    Combo = []
+    index = 0
+    while index < len(properties):
+        PropID = properties[index]["propertyId"]
+        Platform = properties[index]["onlinePlatforms"]
+        if "vrbo" in Platform:
+            if "airbnb" in Platform:
+                Combo.append(PropID)
+                index = index + 1
+            else:
+                index = index + 1
+        else:
+            index = index + 1
+    return len(Combo)
+
+def LiveProperties(self):
+    Active = []
+    index = 0
+    while index < len(properties):
+        living = properties[index]["shortTermRental"]
+        if living is True:
+            Active.append(living)
+            index = index + 1
+        else:
+             index = index + 1
+    return len(Active)
+
+def RentalProperties(self):
+    RentalProps = []
+    index = 0
+    while index < len(properties):
+        PropID = properties[index]["propertyId"]
+        rental = properties[index]["shortTermRental"]
+        strlicense = properties[index]["strLicense"]
+        if rental is True:
+            if strlicense is not None:
+                RentalProps.append(PropID)
+                index = index + 1
+            else:
+                index = index + 1
+        else:
+            index = index + 1
+    return RentalProps
+
+def TotalListings(self):
+    return len(listings)
+
+def LiveListing(self):
+    Live = []
+    index = 0
+    while index < len(listings):
+        Act = listings[index]["active"]
+        Live2 = listings[index]["live"]
+        PropID = listings[index]["propertyId"]
+        Short = listings[index]["shortTermRental"]
+        if Short is True:
+            if Act is True:
+                if Live2 is True:
+                    Live.append(PropID)
+                    index = index + 1
+                else:
+                    index = index + 1
+            else:
+                index = index + 1
+        else:
+            index = index + 1
+    return len(Live)
+
+def UniqueListings(self):
+    UniqueList = []
+    index = 0
+    while index < len(listings):
+        rental_status = listings[index]["shortTermRental"]
+        PropID = listings[index]["propertyId"]
+        if rental_status is True:
+            if PropID not in UniqueList:
+                UniqueList.append(PropID)
+                index = index + 1
+            else:
+                index = index + 1
+        else:
+            index = index + 1
+    return len(UniqueList)
+
+def Address(self):
+    address = []
+    index = 0
+    while index <len(listings):
+        addy = listings[index]["address"]
+        PropID = listings[index]["propertyId"]
+        if addy is not None:
+            address.append(PropID)
+            index = index + 1
+        else:
+            index = index + 1
+    return len(address)
+
+def Identity(self):
+    address = []
+    index = 0
+    while index <len(listings):
+        addy = listings[index]["address"]
+        PropID = listings[index]["propertyId"]
+        if addy is not None:
+            address.append(PropID)
+            index = index + 1
+        else:
+            index = index + 1
+    return address
+    
+
+PropertyDict = {  
+    'propertyCount': TotalProperties(properties),
+    'airbnbCount': AirBnB(properties),
+    'vrboCount': VRBO(properties),
+    'vrbo&airbnbCount': Combined(properties),
+    'liveCount': LiveProperties(properties),
+}
+print(PropertyDict)
+
+ListingDict = {
+    'listingCount': TotalListings(listings),
+    'propertyCount': UniqueListings(listings),
+    'liveCount': LiveListing(listings),
+    'identifiedCount': Address(listings),
+}
+print(ListingDict)
+
+with open("part1a.json", "w") as outfile:
+    json.dump(PropertyDict, outfile)
+
+with open("part1b.json", "w") as outfile:
+    json.dump(ListingDict, outfile)
+
+str_properties = RentalProperties(properties)
+identified_listings = Identity(listings)
